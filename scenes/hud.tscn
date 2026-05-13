@@ -1,0 +1,63 @@
+[gd_scene load_steps=2 format=3 uid="uid://e8y4w4u7y2u3j"]
+
+[sub_resource type="GDScript" id="GDScript_hud"]
+script/source = "extends CanvasLayer
+
+@onready var mana_label = $Control/VBoxContainer/ManaLabel
+@onready var inv_label = $Control/VBoxContainer/InvLabel
+@onready var store_button = $Control/VBoxContainer/StoreButton
+
+func _ready():
+	ManaManager.mana_changed.connect(_on_mana_changed)
+	store_button.pressed.connect(_on_store_pressed)
+
+func _on_store_pressed():
+	var store = get_tree().root.find_child(\"StoreUI\", true, false)
+	if store:
+		store.toggle()
+
+func _process(_delta):
+	var player = get_tree().get_first_node_in_group(\"player\")
+	if player:
+		inv_label.text = \"Dirt: %d\" % player.inventory[\"dirt\"]
+
+func _on_mana_changed(amount):
+	mana_label.text = \"Mana: %d\" % amount
+"
+
+[node name="HUD" type="CanvasLayer"]
+script = SubResource("GDScript_hud")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 150.0
+grow_horizontal = 0
+
+[node name="ManaLabel" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "Mana: 0"
+horizontal_alignment = 2
+
+[node name="InvLabel" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "Dirt: 0"
+horizontal_alignment = 2
+
+[node name="StoreButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "Open Store"

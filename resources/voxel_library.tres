@@ -1,0 +1,13 @@
+[gd_resource type="MeshLibrary" format=3 uid="uid://c8y4w4u7y2u3j"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dirt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dirt"]
+
+[resource]
+item/0/name = "Dirt"
+item/0/mesh = SubResource("BoxMesh_dirt")
+item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/shapes = [SubResource("BoxShape3D_dirt"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/navigation_layers = 1

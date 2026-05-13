@@ -1,0 +1,44 @@
+[gd_scene load_steps=9 format=3 uid="uid://d8y4w4u7y2u3j"]
+
+[ext_resource type="MeshLibrary" uid="uid://c8y4w4u7y2u3j" path="res://resources/voxel_library.tres" id="1_library"]
+[ext_resource type="Script" path="res://scripts/world_manager.gd" id="2_world_mgr"]
+[ext_resource type="PackedScene" uid="uid://b5k8w4u7y2u3j" path="res://scenes/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://e8y4w4u7y2u3j" path="res://scenes/hud.tscn" id="4_hud"]
+[ext_resource type="PackedScene" uid="uid://c9y4w4u7y2u3j" path="res://scenes/core.tscn" id="5_core"]
+[ext_resource type="PackedScene" uid="uid://e9y4w4u7y2u3j" path="res://scenes/store_ui.tscn" id="6_store"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Realm" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldManager" type="Node3D" parent="." node_paths=PackedStringArray("grid_map")]
+script = ExtResource("2_world_mgr")
+grid_map = NodePath("../GridMap")
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("1_library")
+cell_size = Vector3(1, 1, 1)
+
+[node name="RealmCore" parent="." instance=ExtResource("5_core")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Player" parent="." groups=["player"] instance=ExtResource("3_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 3)
+
+[node name="HUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="StoreUI" parent="." instance=ExtResource("6_store")]

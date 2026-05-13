@@ -1,0 +1,78 @@
+[gd_scene load_steps=2 format=3 uid="uid://e9y4w4u7y2u3j"]
+
+[sub_resource type="GDScript" id="GDScript_store"]
+script/source = "extends CanvasLayer
+
+@onready var control = $Control
+@onready var buy_dirt_btn = $Control/Panel/VBoxContainer/BuyDirt
+
+func _ready():
+	control.hide()
+	buy_dirt_btn.pressed.connect(_on_buy_dirt_pressed)
+
+func _input(event):
+	if event.is_action_pressed(\"ui_focus_next\"): # Tab
+		toggle()
+
+func toggle():
+	control.visible = !control.visible
+	if control.visible:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+func _on_buy_dirt_pressed():
+	if ManaManager.current_mana >= 10:
+		var player = get_tree().get_first_node_in_group(\"player\")
+		if player:
+			ManaManager.current_mana -= 10
+			player.inventory[\"dirt\"] += 1
+			print(\"Purchased dirt! Inventory: \", player.inventory[\"dirt\"])
+"
+
+[node name="StoreUI" type="CanvasLayer"]
+layer = 2
+script = SubResource("GDScript_store")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Control"]
+custom_minimum_size = Vector2(300, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Control/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Realm Store"
+horizontal_alignment = 1
+
+[node name="BuyDirt" type="Button" parent="Control/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "Buy Dirt (10 Mana)"
